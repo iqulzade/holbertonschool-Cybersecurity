@@ -1,2 +1,2 @@
 #!/bin/bash
-IFS=. read a b c d <<< $1; m=$(( 0xFFFFFFFF << (32-$2) & 0xFFFFFFFF )); net=$(( (a&(m>>24)&255)<<24|(b&(m>>16)&255)<<16|(c&(m>>8)&255)<<8|(d&m&255) )); echo "$(((net+1)>>24&255)).$(((net+1)>>16&255)).$(((net+1)>>8&255)).$(((net+1)&255)) - $(((net+(1<<(32-$2))-2)>>24&255)).$(((net+(1<<(32-$2))-2)>>16&255)).$(((net+(1<<(32-$2))-2)>>8&255)).$(((net+(1<<(32-$2))-2)&255))"
+python3 -c "import sys; ip=[int(x) for x in sys.argv[1].split('.')]; c=int(sys.argv[2]); ipn=(ip[0]<<24)|(ip[1]<<16)|(ip[2]<<8)|ip[3]; mask=(0xffffffff << (32-c)) & 0xffffffff; net=ipn & mask; bcast=net | (~mask & 0xffffffff); first=net+1; last=bcast-1; fmt=lambda x: '.'.join(str((x>>i)&255) for i in (24,16,8,0)); print(f'{fmt(first)} - {fmt(last)}')" "$1" "$2"
