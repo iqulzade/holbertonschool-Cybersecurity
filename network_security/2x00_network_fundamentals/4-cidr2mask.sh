@@ -1,2 +1,2 @@
 #!/bin/bash
-python3 -c "import sys; n=int(sys.argv[1]); m=(0xffffffff << (32-n)) & 0xffffffff; print('.'.join(str((m>>i)&255) for i in (24,16,8,0)))" "$1"
+m=$((0xffffffff << (32-$1) & 0xffffffff)); printf "%d.%d.%d.%d\n" $(( (m>>24)&255 )) $(( (m>>16)&255 )) $(( (m>>8)&255 )) $(( m&255 ))
