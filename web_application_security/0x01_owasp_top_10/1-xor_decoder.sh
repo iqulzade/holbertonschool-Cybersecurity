@@ -1,13 +1,11 @@
 #!/bin/bash
 
-input="$1"
-encoded="${input#\{xor\}}"
+if [ -z "$1" ]; then
+    echo "Usage: $0 {xor}HASH"
+    exit 1
+fi
 
-echo -n "$encoded" | base64 -d | python3 -c '
-import sys
-data = sys.stdin.buffer.read()
-key = b"{xor}"
-decoded = bytes(b ^ key[i % len(key)] for i, b in enumerate(data))
-sys.stdout.buffer.write(decoded)
-'
-echo
+encoded_string="${1#\{xor\}}"
+
+echo "$encoded_string" | base64 -d | perl -pe '$_ ^= "_" x length'
+echo "" # Add a newline to match your output example
